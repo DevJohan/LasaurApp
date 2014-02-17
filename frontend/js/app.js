@@ -31,6 +31,15 @@ LaserScale = {
     y_mm_to_gui : function( y , info ){
         return (info.gui_preview_height/LaserInfo.laser_bed_height)*y;
     } 
+    y_mm_to_gui : function( y , info ){
+        return (info.gui_preview_height/LaserInfo.laser_bed_height)*y;
+    } 
+    zscale : function( z , info ){
+        return x_mm_to_gui(z,info);
+    } 
+    pscale : function( p , info ){
+        return x_mm_to_gui(p,info);
+    } 
 };
 
 
