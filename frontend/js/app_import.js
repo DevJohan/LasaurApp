@@ -10,8 +10,8 @@ $(document).ready(function(){
   
   // G-Code Canvas Preview
   var icanvas = new Canvas('#import_canvas');
-  icanvas.width = 610;  // HACK: for some reason the canvas can't figure this out itself
-  icanvas.height = 305; // HACK: for some reason the canvas can't figure this out itself
+  icanvas.width = GUIInfo.gui_preview_width;  // HACK: for some reason the canvas can't figure this out itself
+  icanvas.height = GUIInfo.gui_preview_height; // HACK: for some reason the canvas can't figure this out itself
   icanvas.background('#ffffff'); 
   
   
@@ -264,10 +264,10 @@ $(document).ready(function(){
     if (raw_gcode_by_color) {        
       icanvas.background('#ffffff');
       // var bbox_list = [];
-      var scale = 0.5;
+      // var scale = 0.5;
       for (var color in raw_gcode_by_color) {
         if (!(color in exclude_colors)) {
-          GcodeReader.parse(raw_gcode_by_color[color], scale);
+          GcodeReader.parse(raw_gcode_by_color[color], GUIInfo);
           GcodeReader.draw(icanvas, color);
           // bbox_list.push([GcodeReader.bbox[0],GcodeReader.bbox[1],GcodeReader.bbox[2],GcodeReader.bbox[3]]);
         }
