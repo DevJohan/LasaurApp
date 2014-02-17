@@ -11,7 +11,8 @@ function reset_offset() {
   $('#coordinates_info').text('');
 }
 
-  
+
+
 $(document).ready(function(){
 
   var isDragging = false;
@@ -27,7 +28,7 @@ $(document).ready(function(){
     	}
     	var feedrate = mapConstrainFeedrate($("#feedrate_field" ).val());
     	var intensity =  mapConstrainIntesity($( "#intensity_field" ).val());
-    	var gcode = 'G90\n'+air_assist_on+'S'+ intensity + '\n' + g0_or_g1 + ' X' + 2*x + 'Y' + 2*y + 'F' + feedrate + '\nS0\n'+air_assist_off;	
+    	var gcode = 'G90\n'+air_assist_on+'S'+ intensity + '\n' + g0_or_g1 + ' X' + LaserScale.x_gui_to_mm(x,GUIInfo) + 'Y' + LaserScale.y_gui_to_mm(y,GUIInfo) + 'F' + feedrate + '\nS0\n'+air_assist_off;	
       // $().uxmessage('notice', gcode);
     	send_gcode(gcode, "Motion request sent.", false);    
   }
@@ -42,9 +43,9 @@ $(document).ready(function(){
   	var intensity =  mapConstrainIntesity($( "#intensity_field" ).val());
   	var coords_text;
   	if (move_or_cut == 'cut') {
-  	  coords_text = move_or_cut + ' to (' + 2*x + ', '+ 2*y + ') at ' + feedrate + 'mm/min and ' + Math.round(intensity/2.55) + '% intensity';
+  	  coords_text = move_or_cut + ' to (' + LaserScale.x_gui_to_mm(x,GUIInfo) + ', '+ LaserScale.y_gui_to_mm(y,GUIInfo) + ') at ' + feedrate + 'mm/min and ' + Math.round(intensity/2.55) + '% intensity';
   	} else {
-  	  coords_text = move_or_cut + ' to (' + 2*x + ', '+ 2*y + ') at ' + feedrate + 'mm/min'
+  	  coords_text = move_or_cut + ' to (' + LaserScale.x_gui_to_mm(x,GUIInfo) + ', '+ LaserScale.y_gui_to_mm(y,GUIInfo) + ') at ' + feedrate + 'mm/min'
   	}
   	return coords_text;
   }
@@ -69,11 +70,11 @@ $(document).ready(function(){
         opacity: 1.0,
         left: x,
         top: y,
-        width: 609-x,
-        height: 304-y
+        width: GUIInfo.gui_preview_width-1-x,
+        height: GUIInfo.gui_preview_height-1-y
       }, 200 );
       gcode_coordinate_offset = [x,y];
-      var gcode = 'G10 L2 P1 X'+ 2*x + ' Y' + 2*y + '\nG55\n';
+      var gcode = 'G10 L2 P1 X'+ LaserScale.x_gui_to_mm(x,GUIInfo) + ' Y' + LaserScale.y_gui_to_mm(y,GUIInfo) + '\nG55\n';
       send_gcode(gcode, "Offset set.", false);
   		$(this).css('border', '1px dashed #aaaaaa');
   		$("#offset_area").css('border', '1px dashed #ff0000');
@@ -110,25 +111,25 @@ $(document).ready(function(){
   	var y = (e.pageY - offset.top);
   	if (!gcode_coordinate_offset) {
   	  if(!e.shiftKey) {
-        coords_text = assemble_info_text(x,y);
-        if (e.altKey &&isDragging) {
-            assemble_and_send_gcode(x,y);
-        }
-      } else {
-        coords_text = 'set offset to (' + 2*x + ', '+ 2*y + ')';
-      }
-    } else {
-      if(e.shiftKey) {
-        coords_text = 'set offset to (' + x + ', '+ y + ')'
-      } else {
-        var pos = $("#offset_area").position()
-        if ((x < pos.left) || (y < pos.top)) {           
-          coords_text = 'click to reset offset';
+            coords_text = assemble_info_text(x,y);
+            if (e.altKey &&isDragging) {
+              assemble_and_send_gcode(x,y);
+            }
+          } else {
+            coords_text = 'set offset to (' + LaserScale.x_gui_to_mm(x,GUIInfo) + ', '+ LaserScale.y_gui_to_mm(y,GUIInfo) + ')';
+          }
         } else {
-          coords_text = '';
+          if(e.shiftKey) {
+            coords_text = 'set offset to (' + LaserScale.x_gui_to_mm(x,GUIInfo) + ', '+ LaserScale.y_gui_to_mm(y,GUIInfo) + ')'
+          } else {
+            var pos = $("#offset_area").position()
+            if ((x < pos.left) || (y < pos.top)) {           
+              coords_text = 'click to reset offset';
+            } else {
+              coords_text = '';
+            }
+          }
         }
-      }
-    }
     $('#coordinates_info').text(coords_text);
   });
   

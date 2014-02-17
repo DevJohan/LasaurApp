@@ -159,7 +159,7 @@ class SVGTagReader:
             r = node.get('r')
             cx = node.get('cx') or 0
             cy = node.get('cy') or 0
-            if r > 0.0:
+            if r >= 0.0:
                 d = ['M', cx-r, cy,                  
                      'A', r, r, 0, 0, 0, cx, cy+r,
                      'A', r, r, 0, 0, 0, cx+r, cy,

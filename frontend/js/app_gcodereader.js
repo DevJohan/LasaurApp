@@ -18,7 +18,7 @@ GcodeReader = {
   currentRaster : 0,
   rasters : [],
 
-  parse : function (gcode, scale) {
+  parse : function (gcode, scaleinfo) {
   
   	function parseGArgs(str) {
   		var ret = {};
@@ -62,17 +62,17 @@ GcodeReader = {
   	//// parse gcode
   	
   	this.moves = [];
-    this.rasters = [];
-    var raster_width_calculated = 0;
+  	this.rasters = [];
+  	var raster_width_calculated = 0;
   	this.bboxClear();
   	var lastG0 = undefined;
   	var lines = gcode.split("\n");
   	var currentX = 0.0;
   	var currentY = 0.0;
   	var currentI = 0.0;
-    var currentJ = 0.0;
+  	var currentJ = 0.0;
   	var currentF = 0.0;
-    var raster = null;
+  	var raster = null;
 
   	for (var i=0; i<lines.length; i++) {
   		var line = lines[i];
@@ -82,10 +82,10 @@ GcodeReader = {
   			if (gnum == 0 || gnum == 1 || gnum  == 2 || gnum == 3) { 
   				// we have a move line
   				var args = parseGArgs(line.slice(2));
-  				if ('X' in args) { currentX = args.X*scale; }
-  				if ('Y' in args) { currentY = args.Y*scale; }
-  				if ('I' in args) { currentI = args.I*scale; }
-          if ('J' in args) { currentJ = args.J*scale; }
+  				if ('X' in args) { currentX = LaserScale.x_mm_to_gui(args.X,scaleinfo); }
+  				if ('Y' in args) { currentY = LaserScale.y_mm_to_gui(args.Y,scaleinfo); }
+  				if ('I' in args) { currentI = LaserScale.x_mm_to_gui(args.I,scaleinfo); }
+  				if ('J' in args) { currentJ = LaserScale.y_mm_to_gui(args.J,scaleinfo); }
   				if ('F' in args) { currentF = args.F; } else { currentF = null; }
   				this.moves.push( {'type':gnum, 'X':currentX, 'Y':currentY, 'I':currentI, 'J':currentJ, 'F':currentF } );
   				//// bbox
@@ -106,7 +106,7 @@ GcodeReader = {
                 if ('P' in args) {
                     // This is usually the first raster command
                     // There is always a G8 N0 before the first raster, so start counting raster height at -1.
-                    this.rasters.push( {'type':gnum, 'X':currentX, 'Y':currentY, 'P':args.P*scale, 
+                    this.rasters.push( {'type':gnum, 'X':currentX, 'Y':currentY, 'P':LaserScale.pscale(args.P,scaleinfo), 
                                         'height':-1, 'width':0.0, 'x_off':0.0, 'y_off':0.0, 'z_off':0.0, 'data':[] } );
                     currentRaster = this.rasters.length - 1;
                     raster = this.rasters[this.currentRaster];
@@ -115,17 +115,17 @@ GcodeReader = {
 
                 if ('X' in args) {
                     // Raster Overscan
-                    raster.x_off = args.X * scale;
+                    raster.x_off = LaserScale.x_mm_to_gui(args.X,scaleinfo);
                 }
 
                 if ('Y' in args) {
                     // Raster Overscan
-                    raster.y_off = args.Y * scale;
+                    raster.y_off = LaserScale.y_mm_to_gui(args.Y,scaleinfo);
                 }
 
                 if ('Z' in args) {
                     // Raster Overscan
-                    raster.z_off = args.Z * scale;
+                    raster.z_off = LaserScale.zscale(args.Z, scaleinfo);
                 }
 
                 if ('N' in args) {

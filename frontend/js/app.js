@@ -1,6 +1,39 @@
 
 var hardware_ready_state = false;
 
+LaserInfo = {
+
+    laser_bed_width : 340,
+    laser_bed_height : 220
+
+};
+GUIInfo = {
+    gui_preview_width : 610,
+    gui_preview_height : 394
+}
+GUIPreviewInfo = {
+    gui_preview_width : 305,
+    gui_preview_height : 197
+};
+LaserScale = {
+    x_gui_to_mm : function( x , info){
+        return (LaserInfo.laser_bed_width/info.gui_preview_width) * x;
+    },
+
+    y_gui_to_mm : function( y , info ){
+        return (LaserInfo.laser_bed_height/info.gui_preview_height)*y;
+    }, 
+
+    x_mm_to_gui : function( x , info ){
+        return (info.gui_preview_width/LaserInfo.laser_bed_width) * x;
+    },
+
+    y_mm_to_gui : function( y , info ){
+        return (info.gui_preview_height/LaserInfo.laser_bed_height)*y;
+    } 
+};
+
+
 (function($){
 	$.fn.uxmessage = function(kind, text) {
 	  if (text.length > 80) {
