@@ -53,7 +53,8 @@ class SerialManagerClass:
             'limit_hit': False,
             'serial_stop_request': False,
             'door_open': False,
-            'chiller_off': False,
+            'chiller_temp': False,
+            'chiller_flow': False,
             'firmware_version': None
         }
 
@@ -367,10 +368,15 @@ class SerialManagerClass:
             else:
                 self.status['door_open'] = False
 
-            if 'C' in line:  # Warning: Chiller Off
-                self.status['chiller_off'] = True
+            if 'C' in line:  # Warning: Chiller Temperature High
+                self.status['chiller_temp'] = True
             else:
-                self.status['chiller_off'] = False
+                self.status['chiller_temp'] = False
+
+            if 'F' in line:  # Warning: Chiller Flow Low
+                self.status['chiller_flow'] = True
+            else:
+                self.status['chiller_flow'] = False
 
             if 'V' in line:
                 self.status['firmware_version'] = line[line.find('V')+1:]                     
