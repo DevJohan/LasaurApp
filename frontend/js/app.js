@@ -4,7 +4,7 @@ var hardware_ready_state = false;
 LaserInfo = {
 
     laser_bed_width : 340,
-    laser_bed_height : 220
+    laser_bed_height : 225
 
 };
 GUIInfo = {
