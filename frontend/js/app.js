@@ -379,7 +379,7 @@ $(document).ready(function(){
           $('#chiller_status_btn').removeClass('btn-warning')
           $('#chiller_status_btn').addClass('btn-danger')           
           // $().uxmessage('warning', "Chiller is off!"); 
-        } else if ( data.chiller_temp && data.chiller_flow ) {
+        } else if ( data.chiller_temp || data.chiller_flow ) {
           $('#chiller_status_btn').removeClass('btn-success')
           $('#chiller_status_btn').removeClass('btn-danger')
           $('#chiller_status_btn').addClass('btn-warning')           
