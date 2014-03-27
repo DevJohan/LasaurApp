@@ -4,7 +4,7 @@ var hardware_ready_state = false;
 LaserInfo = {
 
     laser_bed_width : 340,
-    laser_bed_height : 220
+    laser_bed_height : 230
 
 };
 GUIInfo = {
@@ -379,12 +379,19 @@ $(document).ready(function(){
           $('#door_status_btn').removeClass('btn-warning')
           $('#door_status_btn').addClass('btn-success')         
         }
-        if (data.chiller_off) {
+        if (data.chiller_temp && data.chiller_flow ) {
           $('#chiller_status_btn').removeClass('btn-success')
+          $('#chiller_status_btn').removeClass('btn-warning')
+          $('#chiller_status_btn').addClass('btn-danger')           
+          // $().uxmessage('warning', "Chiller is off!"); 
+        } else if ( data.chiller_temp && data.chiller_flow ) {
+          $('#chiller_status_btn').removeClass('btn-success')
+          $('#chiller_status_btn').removeClass('btn-danger')
           $('#chiller_status_btn').addClass('btn-warning')           
           // $().uxmessage('warning', "Chiller is off!"); 
         } else {
           $('#chiller_status_btn').removeClass('btn-warning')
+          $('#chiller_status_btn').removeClass('btn-danger')
           $('#chiller_status_btn').addClass('btn-success')
         }
         if (data.power_off) {
