@@ -379,8 +379,8 @@ $(document).ready(function(){
           $('#emergency_stop_btn').addClass('btn-danger') 
           // $().uxmessage('warning', "Emergency stop hit!");
         } else {
-          $('#door_status_btn').removeClass('btn-danger')
-          $('#door_status_btn').addClass('btn-success')         
+          $('#emergency_stop_btn').removeClass('btn-danger')
+          $('#emergency_stop_btn').addClass('btn-success')         
         }
         if (data.chiller_temp && data.chiller_flow ) {
           $('#chiller_status_btn').removeClass('btn-success')
