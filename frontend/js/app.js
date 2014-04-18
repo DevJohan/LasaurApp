@@ -374,6 +374,14 @@ $(document).ready(function(){
           $('#door_status_btn').removeClass('btn-warning')
           $('#door_status_btn').addClass('btn-success')         
         }
+        if (data.emergency_stop) {
+          $('#emergency_stop_btn').removeClass('btn-success')
+          $('#emergency_stop_btn').addClass('btn-danger') 
+          // $().uxmessage('warning', "Emergency stop hit!");
+        } else {
+          $('#door_status_btn').removeClass('btn-danger')
+          $('#door_status_btn').addClass('btn-success')         
+        }
         if (data.chiller_temp && data.chiller_flow ) {
           $('#chiller_status_btn').removeClass('btn-success')
           $('#chiller_status_btn').removeClass('btn-warning')

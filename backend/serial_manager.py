@@ -53,6 +53,7 @@ class SerialManagerClass:
             'limit_hit': False,
             'serial_stop_request': False,
             'door_open': False,
+            'emergency_stop': False,
             'chiller_temp': False,
             'chiller_flow': False,
             'firmware_version': None
@@ -367,6 +368,11 @@ class SerialManagerClass:
                 self.status['door_open'] = True
             else:
                 self.status['door_open'] = False
+
+            if 'G' in line:  # Emergency stop!
+                self.status['emergency_stop'] = True
+            else:
+                self.status['emergency_stop'] = False
 
             if 'C' in line:  # Warning: Chiller Temperature High
                 self.status['chiller_temp'] = True
